@@ -9,5 +9,7 @@ const router=express.Router()
 router.post("/create-user",userController.createUser)
 router.get("/me/:id",checkAuth(...Object.values(Role)),userController.getSingleUser)
 router.get("/users",userController.getAllUser)
+router.patch("/update",checkAuth(...Object.values(Role)),userController.updateUser)
+router.delete("/delete",checkAuth(...Object.values(Role)),userController.deleteUser)
 
 export const userRoutes=router;

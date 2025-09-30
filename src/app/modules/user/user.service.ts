@@ -1,7 +1,7 @@
 import { Prisma, User } from "@prisma/client"
 import { prisma } from "../../config/db";
 import bcryptjs from "bcryptjs"
-import { JwtPayload } from "jsonwebtoken";
+import { decode, JwtPayload } from "jsonwebtoken";
 
 
 
@@ -36,6 +36,21 @@ const getSingleUser=async(id:number,decodedUser:JwtPayload)=>{
     const user=await prisma.user.findUnique({
         where:{
             id:id
+        },
+        select:{
+   id:true,
+   name: true,
+  email: true,
+  Role: true,
+  bio: true,
+  avatarUrl: true,
+  location: true,
+  github: true,
+  linkedin: true,
+  facebook: true,
+  twitter: true,
+  createdAt: true,
+  updatedAt: true
         }
     })
     if (!user) {
@@ -45,13 +60,61 @@ const getSingleUser=async(id:number,decodedUser:JwtPayload)=>{
 }
 
 const getAllUser=async()=>{
-    const users=await prisma.user.findMany()
+    const users=await prisma.user.findMany({
+        select:{
+            id:true,
+          name: true,
+  email: true,
+  Role: true,
+  bio: true,
+  avatarUrl: true,
+  location: true,
+  github: true,
+  linkedin: true,
+  facebook: true,
+  twitter: true,
+  createdAt: true,
+  updatedAt: true
+        }
+    })
     return users
 }
 
+const updateUser=async(payload:Partial<User>,decodedUser:JwtPayload)=>{
+    const isUserExist=await prisma.user.findUnique({where:{id:decodedUser.userId}})
+    const updatedUser=await prisma.user.update({
+        where:{id:decodedUser.userId},
+        data:payload,
+         select:{
+    id:true,
+ name: true,
+  email: true,
+  Role: true,
+  bio: true,
+  avatarUrl: true,
+  location: true,
+  github: true,
+  linkedin: true,
+  facebook: true,
+  twitter: true,
+  createdAt: true,
+  updatedAt: true
+        }
+    })
+    return updatedUser
+}
+
+const deleteUser=async(decodedUser:JwtPayload)=>{
+    const deletedUser=await prisma.user.delete({
+        where:{id:decodedUser.userId},
+    })
+    return deletedUser
+}
 
 export const userService={
     createUser,
     getSingleUser,
-    getAllUser
+    getAllUser,
+    updateUser,
+    deleteUser
 }

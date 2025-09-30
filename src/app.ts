@@ -1,6 +1,6 @@
 import compression from "compression";
 import cors from "cors";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { userRoutes } from "./app/modules/user/user.route";
 import { authRouter } from "./app/modules/auth/auth.route";
 import cookieParser from "cookie-parser";
@@ -32,6 +32,14 @@ app.use("/api/v1",authRouter)
 
 app.get("/", (_req, res) => {
   res.send("Protfolio server is running");
+});
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
 });
 
 // 404 Handler

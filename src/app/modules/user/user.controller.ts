@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { userService } from "./user.service";
-import { JwtPayload } from "jsonwebtoken";
+import {  JwtPayload } from "jsonwebtoken";
 
 
 
@@ -32,10 +32,32 @@ const getAllUser=async(req:Request,res:Response)=>{
     }
 }
 
+const updateUser=async(req:Request,res:Response)=>{
+ try {  
+      const verifiedUser=req.user;
+        const updatedUser=await userService.updateUser(req.body,verifiedUser) 
+       res.status(201).json(updatedUser);
+    } catch (error:any) {
+       res.status(400).json(error.message);
+    }
+}
+
+const deleteUser=async(req:Request,res:Response)=>{
+ try {  
+      const verifiedUser=req.user
+        const deletedUser=await userService.deleteUser(verifiedUser as JwtPayload) 
+       res.status(201).json(deletedUser);
+    } catch (error:any) {
+       res.status(400).json(error.message);
+    }
+}
+
 
 
 export const userController={
     createUser,
     getSingleUser,
-    getAllUser
+    getAllUser,
+    updateUser,
+    deleteUser
 }
