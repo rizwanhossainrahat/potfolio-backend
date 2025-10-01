@@ -3,8 +3,6 @@ import { prisma } from "../../config/db";
 import bcryptjs from "bcryptjs"
 import { decode, JwtPayload } from "jsonwebtoken";
 
-
-
 const createUser=async(payload:Prisma.UserCreateInput):Promise<User>=>{
      const {email,password,...rest}=payload
    
@@ -29,15 +27,13 @@ const createUser=async(payload:Prisma.UserCreateInput):Promise<User>=>{
    
 }
 
-const getSingleUser=async(id:number,decodedUser:JwtPayload)=>{
-    if(decodedUser.userId!==id){
-        throw new Error("You are not permitted to visit this route")
-    }
+const getSingleUser=async(decodedUser:JwtPayload)=>{
+   
     const user=await prisma.user.findUnique({
         where:{
-            id:id
+            id:decodedUser.id
         },
-        select:{
+      select:{
    id:true,
    name: true,
   email: true,
@@ -51,10 +47,11 @@ const getSingleUser=async(id:number,decodedUser:JwtPayload)=>{
   twitter: true,
   createdAt: true,
   updatedAt: true
-        }
+        },
+        
     })
     if (!user) {
-    throw new Error(`User with id ${id} not found`);
+    throw new Error(`User with id  not found`);
   }
     return user
 }
@@ -81,9 +78,9 @@ const getAllUser=async()=>{
 }
 
 const updateUser=async(payload:Partial<User>,decodedUser:JwtPayload)=>{
-    const isUserExist=await prisma.user.findUnique({where:{id:decodedUser.userId}})
+    const isUserExist=await prisma.user.findUnique({where:{id:decodedUser.id}})
     const updatedUser=await prisma.user.update({
-        where:{id:decodedUser.userId},
+        where:{id:decodedUser.id},
         data:payload,
          select:{
     id:true,
@@ -106,7 +103,7 @@ const updateUser=async(payload:Partial<User>,decodedUser:JwtPayload)=>{
 
 const deleteUser=async(decodedUser:JwtPayload)=>{
     const deletedUser=await prisma.user.delete({
-        where:{id:decodedUser.userId},
+        where:{id:decodedUser.id},
     })
     return deletedUser
 }

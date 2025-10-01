@@ -6,7 +6,8 @@ import { JwtPayload } from "jsonwebtoken";
 
 export const createUserToken=(user:User)=>{
     const jwtPayload={
-        userId:user.id,
+        // userId:user.id,
+        id:user.id,
         email:user.email,
         role:user.Role
     }
