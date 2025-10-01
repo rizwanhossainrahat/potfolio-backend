@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import app from "./app";
 import { prisma } from "./app/config/db";
 
-
 dotenv.config();
 
 let server: Server | null = null;
@@ -27,7 +26,7 @@ async function startServer() {
       console.log(`🚀 Server is running on port ${process.env.PORT}`);
     });
 
-    // handleProcessEvents();
+    handleProcessEvents();
   } catch (error) {
     console.error("❌ Error during server startup:", error);
     process.exit(1);

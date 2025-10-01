@@ -34,7 +34,7 @@ app.use("/api/v1",authRouter)
 app.use("/api/v1",projectRouter)
 app.use("/api/v1",blogRouter)
 
-app.get("/", (_req, res) => {
+app.get("/", (req, res) => {
   res.send("Protfolio server is running");
 });
 
