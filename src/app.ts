@@ -6,6 +6,7 @@ import { authRouter } from "./app/modules/auth/auth.route";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session"
 import { projectRouter } from "./app/modules/project/project.route";
+import { blogRouter } from "./app/modules/blog/blog.route";
 
 const app=express()
 
@@ -31,6 +32,7 @@ app.use(
 app.use("/api/v1",userRoutes)
 app.use("/api/v1",authRouter)
 app.use("/api/v1",projectRouter)
+app.use("/api/v1",blogRouter)
 
 app.get("/", (_req, res) => {
   res.send("Protfolio server is running");
