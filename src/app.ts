@@ -10,24 +10,12 @@ import { blogRouter } from "./app/modules/blog/blog.route";
 
 const app=express()
 
-app.use(expressSession({
-    secret:process.env.EXPRESS_SESSION_SECRET as string,
-    resave:false,
-    saveUninitialized:false
-}))
-
-//middleware
-app.use(cors());
-app.use(compression()); 
-app.use(cookieParser())
+app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(expressSession({ secret: "secret", resave: false, saveUninitialized: false }));
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
 
 app.use("/api/v1",userRoutes)
 app.use("/api/v1",authRouter)
